@@ -16,7 +16,7 @@ let settingsSidebar = document.getElementById("settings-sidebar");
 let closeSettings = document.getElementById("close-settings");
 // fonts
 let fontButtons = document.querySelectorAll(".font-option");
-// let colorButtons = document.querySelectorAll(".color-option");
+
 let resetButton = document.getElementById("reset-settings");
 
 // _______ start dark/night mood ______________
@@ -117,12 +117,39 @@ for (let i = 0; i < fontButtons.length; i++) {
   });
 }
 // colors
-
-// reset btn
-resetButton.addEventListener("click", function (){
-    document.body.classList.remove(
-      "font-alexandria",
-      "font-cairo",
+let colors = ["#0ea5e9", "#10b981", "#f97316", "#8b5cf6", "#f59e0b", "#ef4444"];
+// colorsGrid === the container will contain html content
+let colorsGrid = document.getElementById("theme-colors-grid");
+let cartona = "";
+for (let i = 0; i < colors.length; i++) {
+  cartona += `
+  <div class="color-swatch w-10 h-10 rounded-full cursor-pointer" data-color="${colors[i]}" style="background-color:${colors[i]};"></div>
+  `;
+}
+// going into container named colorsGrid and make it = cartona and make any event on 
+colorsGrid.innerHTML = cartona;
+colorsGrid.addEventListener("click", function (e) {
+  if (e.target.classList.contains("color-swatch")) {
+    let colorContainer = e.target.dataset.color;
+    document.documentElement.style.setProperty(
+      "--color-primary",
+      colorContainer,
     );
-      document.body.classList.add("font-tajawal");
-})
+    document.documentElement.style.setProperty(
+      "--color-secondary",
+      colorContainer,
+    );
+    document.documentElement.style.setProperty(
+      "--color-accent",
+      colorContainer,
+    );
+  }
+});
+// reset btn
+resetButton.addEventListener("click", function () {
+  document.body.classList.remove("font-alexandria", "font-cairo");
+  document.body.classList.add("font-tajawal");
+  document.documentElement.style.removeProperty("--color-secondary");
+  document.documentElement.style.removeProperty("--color-primary");
+  document.documentElement.style.removeProperty("--color-accent");
+});
